@@ -17,15 +17,15 @@
   ],
   "author": "Vinicius Pacheco Vieira",
   "license": "ISC",
-  "engines": {
-    "node": "4.2.2"
+  "engines": {    
+    "node": "9.2.0"
   },
   "bugs": {
     "url": "https://github.com/vinipachecov/all-about-node/issues"
   },
   "homepage": "https://github.com/vinipachecov/all-about-node#readme",
   "dependencies": {
-    "ejs": "2.3.4",
+    "ejs": "^2.3.4",
     "express": "^4.13.3"
   }
 }
