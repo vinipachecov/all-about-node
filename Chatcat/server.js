@@ -7,11 +7,15 @@ const app = express();
 const chatCat = require('./app');
 
 app.set('port', process.env.PORT || 3000);
+// static files 
 app.use(express.static('public'));
+
 // View engine relate to our templates
 app.set('view engine', 'ejs');
 
-
+// session
+app.use(chatCat.session);
+// routing
 app.use('/', chatCat.router);
 
 // listen on a port

@@ -17,7 +17,7 @@
   ],
   "author": "Vinicius Pacheco Vieira",
   "license": "ISC",
-  "engines": {    
+  "engines": {
     "node": "9.2.0"
   },
   "bugs": {
@@ -25,7 +25,13 @@
   },
   "homepage": "https://github.com/vinipachecov/all-about-node#readme",
   "dependencies": {
+    "connect-mongo": "1.1.0",
     "ejs": "^2.3.4",
-    "express": "^4.13.3"
+    "express": "^4.13.3",
+    "express-session": "^1.15.6",
+    "mongoose": "^4.3.1",
+    "passport": "^0.4.0",
+    "passport-facebook": "^2.1.1",
+    "passport-twitter": "^1.0.4"
   }
 }
