@@ -1,6 +1,7 @@
 'use strict';
 
-const router = require('express').Router();
+// Social authentication logic
+require('./auth')();
 
 module.exports = {
   router: require('./routes/index')(),

@@ -1,6 +1,7 @@
 'use strict';
 
 const h = require('../helpers');
+const passport = require('passport');
 
 module.exports = () => {
   let routes = {
@@ -9,7 +10,9 @@ module.exports = () => {
         res.render('login');        
       },
       '/rooms': (req, res, next) => {
-        res.render('rooms');        
+        res.render('rooms', {
+          user: req.user
+        });        
       },
       '/chat': (req, res, next) => {
         res.render('chatroom');        
@@ -21,6 +24,12 @@ module.exports = () => {
         req.session.favColor = 'red';
         res.send('My favorit Color: ' + req.session.favColor);        
       },
+      '/auth/facebook': passport.authenticate('facebook'),
+      '/auth/facebook/callback': passport.authenticate('facebook', {
+        successRedirect: '/rooms',
+        failureRedirect: '/'
+      }),
+
       
     },
     'post': {

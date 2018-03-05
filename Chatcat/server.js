@@ -5,6 +5,7 @@ const express = require('express');
 // we can further create other instances and connect to this one
 const app = express();
 const chatCat = require('./app');
+const passport = require('passport');
 
 app.set('port', process.env.PORT || 3000);
 // static files 
@@ -15,6 +16,9 @@ app.set('view engine', 'ejs');
 
 // session
 app.use(chatCat.session);
+app.use(passport.initialize());
+app.use(passport.session());
+
 // routing
 app.use('/', chatCat.router);
 
