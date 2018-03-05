@@ -21,53 +21,52 @@ let _registerRoutes = (routes, method) => {
 }
 
 let route = routes => {
-  _registerRoutes(routes);
-  return router;
+	_registerRoutes(routes);
+	return router;
 }
 
-// find a single user based on a key
+// Find a single user based on a key
 let findOne = profileID => {
-  return db.userModel.findByIdAndUpdate({
-    'profileId': profileID
-  });
+	return db.userModel.findOne({
+		'profileId': profileID
+	});
 }
 
-//Create a new user and returns that instance
-
+// Create a new user and returns that instance
 let createNewUser = profile => {
-  return new Promise((resolve, reject) => {
-    let newChatUser = new db.userModel({
-      profileId: profile.id,
-      fullName: profile.displayName,
-      profilePic: profile.photos[0].value || ''
-    });
+	return new Promise((resolve, reject) => {
+		let newChatUser = new db.userModel({
+			profileId: profile.id,
+			fullName: profile.displayName,
+			profilePic: profile.photos[0].value || ''
+		});
 
-    newChatUser.save(error => {
-      if (error) {        
-        reject(error);
-      } else {
-        resolve(newChatUser);
-      }
-    })
-  });
+		newChatUser.save(error => {
+			if(error) {
+				reject(error);
+			} else {
+				resolve(newChatUser);
+			}
+		});
+	});
 }
 
-//
+// The ES6 promisified version of findById
 let findById = id => {
-  return new Promise((resolve, reject) => {
-    db.userModel.findById(id, (error, user) => {
-      if (error) {
-        reject(error);
-      } else {
-        resolve(user);
-      }
-    })
-  })
+	return new Promise((resolve, reject) => {
+		db.userModel.findById(id, (error, user) => {
+			if(error) {
+				reject(error);
+			} else {
+				resolve(user);
+			}
+		});
+	});
 }
 
 module.exports = {
   route,
-  findOne,
-  createNewUser,
-  findById
+	findOne,
+	createNewUser,
+	findById,
 }
