@@ -64,9 +64,21 @@ let findById = id => {
 	});
 }
 
+// Create a middleware function to prevent users to access routes which they are not authorized
+let isAuthenticated = (req, res, next) => {
+	// isAuthenticated is a passport method that returns true or false for our
+	// authentication
+	if (req.isAuthenticated()) {
+		next();
+	} else {
+		res.redirect('/');
+	}
+}
+
 module.exports = {
   route,
 	findOne,
 	createNewUser,
 	findById,
+	isAuthenticated
 }

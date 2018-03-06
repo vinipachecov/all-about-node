@@ -9,14 +9,18 @@ module.exports = () => {
       '/': (req, res, next) => {
         res.render('login');        
       },
-      '/rooms': (req, res, next) => {
+      // notice the use of brackets for inserting middleware functions
+      // for previous data processing of a route
+      '/rooms':[h.isAuthenticated, (req, res, next) => {
         res.render('rooms', {
           user: req.user
         });        
-      },
-      '/chat': (req, res, next) => {
-        res.render('chatroom');        
-      },
+      }],
+      '/chat': [h.isAuthenticated, (req, res, next) => {
+        res.render('chatroom', {
+          user: req.user
+        });        
+      }],
       '/getsession': (req, res, next) => {
         res.send('My favorit Color: ' + req.session.favColor);        
       },
@@ -28,7 +32,11 @@ module.exports = () => {
 			'/auth/facebook/callback': passport.authenticate('facebook', {
 				successRedirect: '/rooms',
 				failureRedirect: '/'
-			}),
+      }),
+      '/logout':(req,res,next) => {
+        req.logout();
+        res.redirect('/');
+      }
 
       
     },
