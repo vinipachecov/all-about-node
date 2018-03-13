@@ -30,4 +30,27 @@ module.exports = (io, app) => {
     });
   });
 
+  io.of('/chatter').on('connection', socket => {
+      // join a chatroom
+      socket.on('join', data => {
+        let usersList = h.addUserToRoom(allrooms, data, socket);        
+
+        //update the list of active users as shown on the chatroom page
+        socket.broadcast.to(data.roomID).emit('updateUsersList', JSON.stringify(usersList.users));
+        socket.emit('updateUsersList', JSON.stringify(usersList.users));
+      });
+
+      // when a socket exits
+      socket.on('disconnect', () => {
+        //fnd the room, to which the socket is connected to and remove the user
+        let room = h.removeUserFromRoom(allrooms, socket);
+        socket.broadcast.to(room.roomID).emit('updateUsersList', JSON.stringify(room.users));
+      });
+
+      //when a new message arrives
+      socket.on('newMessage', data => {
+        socket.to(data.roomID).emit('inMessage', JSON.stringify(data));
+      });
+  });
+
 }

@@ -3,6 +3,7 @@
 const passport = require('passport');
 const config = require('../config');
 const h = require('../helpers');
+const logger = require('../logger');
 const FacebookStrategy = require('passport-facebook').Strategy;
 
 module.exports = () => {
@@ -20,7 +21,7 @@ module.exports = () => {
 
 	let authProcessor = (accessToken, refreshToken, profile, done) => {
 		// Find a user in the local db using profile.id
-		// If the user is found, return the user data using the done()
+		// If the user is found then return the user data using the done()
 		// If the user is not found, create one in the local db and return
 		h.findOne(profile.id)
 			.then(result => {

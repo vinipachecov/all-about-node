@@ -18,6 +18,14 @@ app.set('view engine', 'ejs');
 app.use(chatCat.session);
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(require('morgan')('combined', {
+  stream: { 
+    write: message => {
+      // write to legs :)
+      chatCat.logger.log('info', message);
+    }
+  }
+}));
 
 // routing
 app.use('/', chatCat.router);

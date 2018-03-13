@@ -11,7 +11,9 @@
 		'use strict';
 		$(() => {
 			// this is a namespace where it gets the data. Just like a pipeline.
-			let socket = io('<%= host %>' + '/roomslist');
+			let socket = io('<%= host %>' + '/roomslist', {
+				transports: ['websocket']
+			});
 
 			let newRoomInput = $("input[name='roomName']");
 

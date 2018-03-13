@@ -2,17 +2,102 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>ChatCat - Topic Goes Here</title>
+	<title>ChatCat - <%= room %></title>
 	<link rel="stylesheet" href="/css/chatroomStyles.css">
 	<script src="/js/jquery-2.1.4.min.js"></script>
 	<script src="/socket.io/socket.io.js"></script>
+	<script src="https://widget.cloudinary.com/global/all.js"></script>
 	<script>
 		'use strict';
 		$(() => {
-			let socket = io('<%= host %>' + '/chatter');
+			let socket = io('<%= host %>' + '/chatter', {
+				transports: ['websocket']
+			});
 			let roomID = '<%= roomID %>';
 			let user = '<%= user.fullName %>';
 			let userPic = '<%= user.profilePic %>';
+			let chatUsers = $('.chatUsers');
+			let chatInput = $("input[name='userInput']");
+			let chatMessagesDiv = $('.chatMessages');
+			//fileselection
+			let filePicker = $('#uploadFile');
+
+// event listener for connecting
+			socket.on('connect', () => {
+				socket.emit('join', {
+					roomID,
+					user,
+					userPic
+				});
+			});
+
+			let userList = user => {
+				return `<div class="userBlock">
+					<div class="userPic"><img src="${user.userPic}" alt="${user.user}"></div>
+					<div class="cuserName">${user.user}</div>
+				</div>`;
+			}
+
+// event listener for updating users List
+			socket.on('updateUsersList', data => {
+				let parsedData = JSON.parse(data);
+				let usersListData = '';
+				for(let user of parsedData) {
+					usersListData += userList(user);
+				}
+				chatUsers.html('').html(usersListData);
+			});
+
+			let updateFeed = (userPic, message) => {
+				let template = `<div class="chatBlock">
+					<div class="userPic"><img src="${userPic}"></div>
+					<div class="chatMsg">${message}</div>
+				</div>	`;
+				$(template).hide().appendTo(chatMessagesDiv).slideDown(200);
+			}
+
+			chatInput.on('keyup', function(evt) {
+				evt.preventDefault();
+				let messageFid = $(this);
+				if (evt.which === 13 && messageFid.val() !== '') {
+					socket.emit('newMessage', {
+						roomID,
+						user,
+						userPic,
+						message: messageFid.val()
+					});			
+					// update the local feed
+					updateFeed(userPic, messageFid.val());
+					messageFid.val('');							
+				}
+			});
+
+			socket.on('inMessage', data => {
+				let parsedData = JSON.parse(data);
+				updateFeed(parsedData.userPic, parsedData.message);
+			});
+
+			filePicker.on('click', function(evt) {
+				cloudinary.openUploadWidget({
+					cloud_name: 'dqkhy63yu',
+					upload_preset: 'ob008yr9'
+				}, (error, result) => {
+				 if (!error) {
+					 let tmp ='';
+					 for( let img of result) {
+						 tmp += `<img src="${(img.url)}">`;
+					 }
+					 updateFeed(userPic, tmp);
+					 socket.emit('newMessage', {
+						 roomID,
+						 user,
+						 userPic,
+						 message: tmp
+					 });
+				 }
+			 });
+			});
+
 		});
 	</script>
 </head>
@@ -31,10 +116,7 @@
 			<div class="chatMessagesPanel">
 				<div class="chatMessages">
 				<!-- Loop this for chat messages -->
-				<div class="chatBlock">
-					<div class="userPic"><img src="/img/user.jpg"></div>
-					<div class="chatMsg">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deleniti perferendis eius aut nesciunt necessitatibus ad nulla, qui sequi, id nam. Possimus odit aut nisi veritatis amet distinctio id officiis ipsam!</div>
-				</div>					
+						
 				<!-- loop end -->
 				</div>
 				<div class="typePanel">
