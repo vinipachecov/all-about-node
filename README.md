@@ -21,6 +21,13 @@ On photogrid app the course helps you to use a different environment, Amazon Web
 
 # Apollo
 Apollo is the final application, where the instructor tries to show us the basics of a messaging broker. He uses Apache Apollo and a Python service besides the Node.JS app that we build.
+Bellow some of the techniques the instructor showed us a bit:
+* Enterprise integration techniques
+* Hapi framework 
+* Hapi's plugin architecture
+* A Taste of ES6 ( let, const, spread operator, arrow functions, promises)
+* Apache Apollo MQ
+* STOMP
+* A nodejs app that communicates with a python script
+* Server Loggin with good node.js plugin
 
-
-![deepinscreenshot_select-area_20180319203756](https://user-images.githubusercontent.com/2838834/37627912-7bc19526-2bb5-11e8-998b-0f0aeedbab0a.png)
